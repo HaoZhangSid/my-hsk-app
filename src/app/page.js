@@ -1,101 +1,156 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import HSKSelector from './components/HSKSelector';
+import PlaySpeech from './components/PlaySpeech';
+import { presetTopics } from './data/topics';  // 从 topics.js 导入
+import { apiProviders } from './data/apiProviders';  // 从 apiProviders.js 导入
+import { styles } from './data/styles';  // 从 styles.js 导入
+
+export default function HomePage() {
+  const [level, setLevel] = useState('');
+  const [text, setText] = useState('');
+  const [customTopic, setCustomTopic] = useState('');
+  const [presetTopic, setPresetTopic] = useState('');
+  const [apiProvider, setApiProvider] = useState('kimi');
+  const [isLoading, setIsLoading] = useState(false);
+  const [style, setStyle] = useState(styles[0].value);  // 默认选择 "默认" 风格
+
+  const generateText = async () => {
+    if (!level) {
+      alert("请先选择 HSK 等级！");
+      return;
+    }
+
+    const topic = customTopic || presetTopic;
+    if (!topic) {
+      alert("请输入或选择一个主题！");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`/api/generateText?apiProvider=${apiProvider}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ level, topic, style }),  // 传递风格
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`错误：${errorData.error}`);
+        return;
+      }
+
+      const data = await response.json();
+      setText(data.text);
+    } catch (error) {
+      console.error('请求生成文本时出错:', error);
+      alert('请求生成文本时出错');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-4">HSK 中文短文生成器</h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <HSKSelector onChange={setLevel} />
+
+      <div className="mt-4">
+        <label htmlFor="custom-topic" className="block text-lg font-medium text-gray-700">
+          输入自定义主题:
+        </label>
+        <input
+          id="custom-topic"
+          type="text"
+          value={customTopic}
+          onChange={(e) => setCustomTopic(e.target.value)}
+          placeholder="请输入主题..."
+          className="w-full p-2 border border-gray-300 rounded-md mt-2"
+        />
+      </div>
+
+      <div className="mt-4">
+        <label htmlFor="preset-topic" className="block text-lg font-medium text-gray-700">
+          或选择一个预设主题:
+        </label>
+        <select
+          id="preset-topic"
+          value={presetTopic}
+          onChange={(e) => setPresetTopic(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md mt-2"
+        >
+          <option value="">请选择一个主题...</option>
+          {presetTopics.map((topic) => (
+            <option key={topic} value={topic}>
+              {topic}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mt-4">
+        <label htmlFor="style" className="block text-lg font-medium text-gray-700">
+          选择语音风格:
+        </label>
+        <select
+          id="style"
+          value={style}
+          onChange={(e) => setStyle(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md"
+        >
+          {styles.map((s) => (
+            <option key={s.value} value={s.value}>
+              {s.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mt-4">
+        <label htmlFor="api-provider" className="block text-lg font-medium text-gray-700">
+          选择 API 提供者:
+        </label>
+        <select
+          id="api-provider"
+          value={apiProvider}
+          onChange={(e) => setApiProvider(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md mt-2"
+        >
+          {apiProviders.map((provider) => (
+            <option key={provider.value} value={provider.value}>
+              {provider.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <Button
+        onClick={generateText}
+        disabled={isLoading}
+        className="mt-4"
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            生成中...
+          </>
+        ) : (
+          '生成短文'
+        )}
+      </Button>
+
+      {text && (
+        <div className="mt-6">
+          <p className="mb-4">{text}</p>
+          <PlaySpeech text={text} />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
     </div>
   );
 }
