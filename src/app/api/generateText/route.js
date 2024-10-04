@@ -10,7 +10,7 @@ export async function POST(request) {
   }
 
   try {
-    const prompt = `生成一个 HSK ${level} 级的中文短文，主题是 "${topic}, 请直接回复内容,不要有任何别的废话"。`;
+    const prompt = `生成一个 HSK ${level} 级的中文短文，主题是 "${topic}, 请直接回复正文,不要有任何的除内容以外的回复,不要有类似的内容"好的，以下是一篇HSK 1级的中文短文，主题是“xx”""。`;
 
     let apiResponse;
 
