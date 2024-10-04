@@ -25,8 +25,9 @@ export default function RootLayout({ children }) {
         className={`${cuteFont.variable} ${cuteMono.variable} antialiased bg-pink-50 text-pink-900 min-h-screen flex flex-col`}
       >
         <header className="bg-pink-400 text-white p-6 shadow-md">
-          <h1 className="text-3xl font-bold text-center animate-bounce">
+          <h1 className="text-3xl font-bold text-center animate-pulse-slow">
             ❤️清泉老师教中文❤️
+              <p>Tuyen Chinese</p>
           </h1>
         </header>
         <main className="container mx-auto py-8 px-4 flex-grow">
