@@ -1,36 +1,42 @@
 import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = localFont({
+const cuteFont = localFont({
   src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
+  variable: "--font-cute",
   weight: "100 900",
 });
-const geistMono = localFont({
+
+const cuteMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+  variable: "--font-cute-mono",
   weight: "100 900",
 });
 
 export const metadata = {
-  title: "HSK Generator App",
-  description: "Generate HSK level texts and convert them to speech",
+  title: "清泉老师教中文",
+  description: "生成可爱的中文短文并转换成语音",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="zh-CN">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100 text-gray-900`}
+        className={`${cuteFont.variable} ${cuteMono.variable} antialiased bg-pink-50 text-pink-900 min-h-screen flex flex-col`}
       >
-        <header className="bg-blue-600 text-white p-4">
-          <h1 className="text-2xl font-bold">HSK 短文生成器</h1>
+        <header className="bg-pink-400 text-white p-6 shadow-md">
+          <h1 className="text-3xl font-bold text-center animate-bounce">
+            ❤️清泉老师教中文❤️
+          </h1>
         </header>
-        <main className="container mx-auto py-8">
+        <main className="container mx-auto py-8 px-4 flex-grow">
           {children}
         </main>
-        <footer className="bg-blue-600 text-white p-4 text-center">
-          <p>© 2024 HSK Generator</p>
+        <footer className="bg-pink-400 text-white p-4 text-center w-full">
+          <p className="text-sm">
+            © 2024 清泉老师教中文 |
+            <span className="ml-2 animate-pulse inline-block">❤️</span>
+          </p>
         </footer>
       </body>
     </html>

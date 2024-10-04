@@ -76,3 +76,20 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+ruby {
+  display: inline-block;
+  font-size: 1.2em;  /* 设置汉字的大小 */
+  text-align: center;
+  margin-right: 0.7rem;
+}
+
+rt {
+  font-size: 0.7em;  /* 设置拼音的大小 */
+  color: #333;      /* 拼音颜色 */
+  line-height: 1.2; /* 保持拼音与汉字之间的适当距离 */
+  font-weight: lighter;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}

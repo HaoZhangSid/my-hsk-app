@@ -6,6 +6,11 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    'ruby-char',
+    'ruby-pinyin',
+    // 其他需要的类名
+  ],
   theme: {
   	extend: {
   		colors: {

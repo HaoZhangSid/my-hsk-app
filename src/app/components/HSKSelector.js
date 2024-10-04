@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const hskLevels = [
   { value: "1", label: "HSK 1" },
@@ -12,32 +13,34 @@ const hskLevels = [
 ];
 
 export default function HSKSelector({ onChange }) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState("1");
 
-  const handleSelect = (e) => {
-    const selectedValue = e.target.value;
+  const handleSelect = (selectedValue) => {
     setValue(selectedValue);
     onChange(selectedValue);
   };
 
   return (
     <div className="w-full max-w-sm space-y-4">
-      <label htmlFor="hsk-level" className="block text-lg font-medium text-gray-700">
+      <label htmlFor="hsk-level" className="block text-lg font-medium text-pink-700">
         选择 HSK 等级:
       </label>
-      <select
-        id="hsk-level"
-        value={value}
-        onChange={handleSelect}
-        className="w-full p-2 border border-gray-300 rounded-md"
-      >
-        <option value="">选择 HSK 等级</option>
-        {hskLevels.map((level) => (
-          <option key={level.value} value={level.value}>
-            {level.label}
-          </option>
-        ))}
-      </select>
+      <Select onValueChange={handleSelect} value={value}>
+        <SelectTrigger id="hsk-level" className="w-full p-2 border border-pink-300 rounded-md bg-white text-pink-800 focus:ring-pink-500 focus:border-pink-500">
+          <SelectValue placeholder="选择 HSK 等级" />
+        </SelectTrigger>
+        <SelectContent className="bg-white border border-pink-300 rounded-md shadow-lg">
+          {hskLevels.map((level) => (
+            <SelectItem 
+              key={level.value} 
+              value={level.value}
+              className="text-pink-800 hover:bg-pink-100 focus:bg-pink-200"
+            >
+              {level.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

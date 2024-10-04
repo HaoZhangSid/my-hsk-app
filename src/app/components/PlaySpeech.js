@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { styles } from '../data/styles';  // 从 styles.js 导入语气风格
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";  // 引入 Select 组件
+import { Button } from "@/components/ui/button";
 
 const voices = [
   { label: 'Xiaoxiao (Female)', value: 'zh-CN-XiaoxiaoNeural' },
@@ -42,45 +44,53 @@ export default function PlaySpeech({ text }) {
         <label htmlFor="voice" className="block text-lg font-medium text-gray-700">
           选择语音:
         </label>
-        <select
-          id="voice"
-          value={voice}
-          onChange={(e) => setVoice(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md"
-        >
-          {voices.map((v) => (
-            <option key={v.value} value={v.value}>
-              {v.label}
-            </option>
-          ))}
-        </select>
+        <Select onValueChange={setVoice} value={voice}>
+          <SelectTrigger className="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-800 focus:ring-gray-500 focus:border-gray-500">
+            <SelectValue placeholder="选择语音" />
+          </SelectTrigger>
+          <SelectContent className="bg-white border border-gray-300 rounded-md shadow-lg">
+            {voices.map((v) => (
+              <SelectItem 
+                key={v.value} 
+                value={v.value}
+                className="text-gray-800 hover:bg-gray-100 focus:bg-gray-200"
+              >
+                {v.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="mt-4">
         <label htmlFor="style" className="block text-lg font-medium text-gray-700">
           选择语气:
         </label>
-        <select
-          id="style"
-          value={style}
-          onChange={(e) => setStyle(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md"
-        >
-          {styles.map((s) => (
-            <option key={s.value} value={s.value}>
-              {s.label}
-            </option>
-          ))}
-        </select>
+        <Select onValueChange={setStyle} value={style}>
+          <SelectTrigger className="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-800 focus:ring-gray-500 focus:border-gray-500">
+            <SelectValue placeholder="选择语气" />
+          </SelectTrigger>
+          <SelectContent className="bg-white border border-gray-300 rounded-md shadow-lg">
+            {styles.map((s) => (
+              <SelectItem 
+                key={s.value} 
+                value={s.value}
+                className="text-gray-800 hover:bg-gray-100 focus:bg-gray-200"
+              >
+                {s.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
-      <button
-        className="bg-green-500 text-white py-2 px-4 rounded mt-4"
+      <Button
+        className="mt-6 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
         onClick={generateSpeech}
         disabled={loading}
       >
         {loading ? '生成中...' : '生成语音'}
-      </button>
+      </Button>
 
       {audioUrl && <audio controls src={audioUrl} className="mt-4" />}
     </div>
