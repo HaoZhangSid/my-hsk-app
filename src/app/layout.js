@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import Link from "next/link";
 import "./globals.css";
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const cuteFont = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,6 +26,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${cuteFont.variable} ${cuteMono.variable} antialiased bg-pink-50 text-pink-900 min-h-screen flex flex-col`}
       >
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
         <header className="bg-pink-400 text-white p-6 shadow-md">
           <h1 className="text-3xl font-bold text-center animate-pulse-slow">
             ❤️清泉老师教中文❤️
