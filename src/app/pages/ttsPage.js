@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from 'react';
-import PlaySpeech from '../components/PlaySpeech';
 
 export default function TTSPage() {
   const [text, setText] = useState('');

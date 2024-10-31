@@ -19,7 +19,6 @@ export const metadata = {
   title: "清泉老师教中文",
   description: "生成可爱的中文短文并转换成语音",
 };
-
 export default function RootLayout({ children }) {
   return (
     <html lang="zh-CN">
@@ -29,6 +28,7 @@ export default function RootLayout({ children }) {
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}
+        <h2>{process.env.NEXT_PUBLIC_GA_ID}</h2>
         <header className="bg-pink-400 text-white p-6 shadow-md">
           <h1 className="text-3xl font-bold text-center animate-pulse-slow">
             ❤️清泉老师教中文❤️
