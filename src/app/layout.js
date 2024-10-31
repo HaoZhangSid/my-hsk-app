@@ -42,9 +42,9 @@ export default function RootLayout({ children }) {
             <Link href="/text-to-speech" className="text-white text-lg font-semibold hover:text-pink-200 transition duration-200">
               文本转语音
             </Link>
-            <Link href="/about" className="text-white text-lg font-semibold hover:text-pink-200 transition duration-200">
+            {/* <Link href="/about" className="text-white text-lg font-semibold hover:text-pink-200 transition duration-200">
               关于我们
-            </Link>
+            </Link> */}
           </nav>
         </header>
         
